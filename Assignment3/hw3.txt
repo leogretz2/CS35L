@@ -1,0 +1,41 @@
+1. Adding the check for the . and .. each time ls is run makes the performance
+of the command worse. This is proven by the time command, as well. When tested
+in separate directories, the unmodified ls command ran faster than the modified
+one.
+
+2. With the patched version of coreutils, there shouldn't be any problems with
+running the ls command. A user, however, should be aware of the fact that -A
+removes the . and .. results from the list, so for options like ls -f in the
+ls command, a user might also have to add -A to exclude the . and .. because
+the -f command automatically invokes the -aU option.
+
+3. When attempting to run the randline.py file with an empty file, an
+IndexError is thrown. This is because the chooseline() function looks for a
+line, while in the file given there are none. If 0 is passed as the numlines
+parameter, the error does not occur because the function is not called, but
+this results in nothing being done.
+
+This is the output:
+
+Traceback (most recent call last):
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/local/cs/Python-2.7.15/lib/python2.7/random.py", line 277, in choice
+    return seq[int(self.random() * len(seq))]  # raises IndexError if seq is empty
+IndexError: list index out of range
+
+
+4. In Python 3, the script does not work at all, because they came out with the
+new version they deprecated automatic tuple packing, so the syntax (errno, strerror) is
+invalid.
+
+The output is:
+
+  File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax

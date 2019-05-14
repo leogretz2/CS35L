@@ -1,0 +1,67 @@
+Leo Gretzinger
+
+Lab Answers:
+
+1. -k, --apropos. This answer was located in man man.
+2. /usr/local/cs/bin. I used the which shell command to find this: which mv and which sh
+3. pr, tr. pr - used to convert text files for printing, tr - used to translate or delete characters. I used cd /usr/local/cs/bin then find . -executable -name '?r'
+4. sticky ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked is the file. /usr/bin/emacs is a symbolic link to /etc/alternatives/emacs, 
+   which is a symbolic link to the file stated before. I used readlink /usr/bin/emacs then readlink /etc/alternatives/emacs which gets the file 
+   /usr/bin/emacs-24.3
+5. /usr/bin/gcc is version 4.5.3 (Red Hat 4.8.5-36) and plain gcc is version 8.3.0. I used /usr/bin/gcc --version and gcc --version to get these. They are 
+   different files because they are located in different places. plain gcc is located in /usr/local/cs/bin, while /usr/bin/gcc is just in /usr/bin.
+6. u+sx adds setuid and executable rights to the user (the x is unnecessary because the s permission makes the file executable by the user): in addition
+   to setting the file to executable, s also sets the user id of the process to the user id of the owner of that file. o-w disallows anyone who is not 
+   the owner/group of the file from writing in the file.
+7. The first six directories I found were: 
+   ..
+   ../src/coreutils
+   ../src/coreutils/RCS
+   ../share/info
+   ../share/man/man1
+   ../bin
+   There were 144 total directories (the rest were in /coreutils). I got this list with the command find .. -mtime -28 -type d
+8. There were 280 total symboic links in the /usr/bin directory which is where find is located. Shell commands: whereis find      find /usr/bin -type l
+9. The oldest file was librom1394.so.0.3.0 in /usr/lib64. Shell command to get this:  ls /usr/lib64 -lt | tail -n 1
+10.locale gets its data from the current locale environment LOCPATH and LANG, or all locale environements. Shell command: man locale
+11.These commands have downcase in them: 
+
+   downcase-dwim                 M-x ... RET
+      Downcase words in the region, if active; if not, downcase word at
+      point.
+   downcase-region               C-x C-l
+      Convert the region to lower case.  In programs, wants two
+      arguments.
+   downcase-word                 M-l
+      Convert to lower case from point to end of word, moving over.
+   
+   Emacs commands for this were: emacs  C-h a downcase
+12.C-M-r runs the command isearch-backward-regexp which searches backwards trying to match at each starting point. C-M-v runs the command scroll-other-window
+   which scrolls the other window down without having to switch to that window.
+
+   Emacs commands for this were: emacs C-h c C-M-r and emacs C-h c C-M-v
+13.keyboard-quit is an interactive compiled Lisp function in ‘simple.el’.
+
+   It is bound to C-g.
+
+   (keyboard-quit)
+
+   Signal a ‘quit’ condition.
+   During execution of Lisp code, this character causes a quit directly.
+   At top-level, as an editor command, this simply beeps.
+
+   Essentially, this means that it cancels the current command... if I am looking for a certain documentation, C-g aborts this process.
+
+   Emacs commands for this were: C-h c C-g to find that the command name was keyboard-quit then C-h f keyboard-quit to get the documentation for the function.
+                                 I could have also done just C-h k C-g
+14.Yank reinserts the most recently killed stretch of text in the kill ring. You can invoke it easily by typing C-y.
+   Emacs command to find this: C-h f yank
+15.The emacs command dired printed these two directories: 
+   dr-xr-xr-x.   2 root root       77824 Mar 26 13:15 .
+   drwxr-xr-x.  15 root root        4096 May 22  2018 ..
+   besides that both the ls -l and the dired command printed the same results
+   Shell commands: cd /usr/bin      ls -l   (I also used ls -l | head -n 150 to see the top 150 results that did not show up on the screen with just ls -l)
+   Emacs commands: C-x d /usr/bin
+
+
+

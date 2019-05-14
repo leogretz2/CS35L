@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sed -n '/<td>/p' |  # keeping only the lines with the <td> tag
+sed 'n; d' | # delete all even lines
+sed 's/<[^>]*>//g' | # delete all html tags
+sed "s/\`/\'/g" | # convert all ` into '
+tr [:upper:] [:lower:] | # all uppercase letters to lowercase
+sed '/^$/d' | # delete all empty lines
+tr -d [:blank:] | # delete all remaining blanks
+sed "/[^pk\'mnwlhaeiou]/d" | # delete any character that is not present into the Hawaiian alphabet
+sort -u # sort the file and remove non-unique words

@@ -1,0 +1,69 @@
+1. I started the lab by getting the compressed tarball, the signature and the GNU
+keyring with the following commands:
+
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+wget https://ftp.gnu.org/gnu/gnu-keyring.gpg 
+
+
+When I ran this command:
+gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+everything went smoothly until I got this WARNING:
+
+ WARNING: This key is not certified with a trusted signature!
+          There is no indication that the signature belongs to the owner.
+
+Essentially, this warning occurs because this is a public file and there is no way
+to ensure that the signature that I ran belongs to the owner.
+
+
+2. First, I unzipped the tarball and made a temporary directory to put the file in:
+tar –xJvf coreutils-8.29.tar.xz
+mkdir ~/coreutilsInstall
+
+I switched to the directory that the coreutils was downloaded into: cd coreutils-8.29,
+read the install page: emacs INSTALL
+
+- then to configure the file into the directory I made
+./configure --prefix=/u/eng/class/classlgr/coreutilsInstall
+- then to compile it and install it: make, then make install
+
+
+3. To reproduce the bug in the old coreutils, switch into my directory's bin:
+cd ../coreutilsInstall/bin
+Then run the command: ./ls -a -A
+
+- This prints out . and .. (included in all the other files), displaying the bug
+
+
+4. To perform the patch, I copied the patch page online, then switched into the 
+coreutils-8.29 directory, made an diff file with the patch and then ran the patch file:
+
+cd coreutils-8.29
+emacs patch.diff
+patch -p1 < patch.diff
+
+When I ran the patch command, I received an error message that Hunk #1 failed at 4,
+which means that this was where the patch file differed from the original. The patch
+was successful other than that.
+
+
+5. To reinstall the coreutils-8.29 with the patch, I used four commands. First to make
+the directory, which gave me an automake error, at which point I reconfigured the
+files that needed to be reconfigured. I then used make and again and installed it into
+coreutils-8.29:
+
+make
+autoreconf --force --install
+make
+
+
+6. To test that the patched worked, I switched back into my temporary directory and ran
+the ls command:
+
+cd ~/coreutilsInstall/bin
+./ls -aA
+
+This printed out the list of the files and directories in the directory without . and ..
+Proving that the patch worked!
+

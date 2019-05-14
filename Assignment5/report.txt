@@ -1,0 +1,285 @@
+------------------------Lab------------------------------------
+
+1. First I wrote the tr2b.c file which takes in buffered input
+and translates specific characters. This includes checks to see
+if the number of arguments was right, the length of the arguments
+were the same and the 'from' word contains duplicates. If none
+of these errors are cuased, the program translates the common
+letters in 'from' and stdin into the corresponding letters in 'to.'
+This program uses getchar and putchar to interact with stdin and
+stdout.
+
+2. Next I wrote the tr2u.c file which deals with unbuffered input
+basically by using read and write insteda of getchar and putchar.
+
+3. Now we have to test these commands on a large 5 million byte
+file, which I created using:
+
+head --bytes=5000000 /dev/urandom > largefile.txt
+
+Now to test it using strace (with the c option), for the buffered
+program I used:
+
+strace -c ./tr2b ‘AB’ ‘XY’ < largefile.txt > tr2boutp
+
+which returned 1247 system calls.
+
+and for the unbuffered program I used:
+
+strace -c ./tr2u ‘AB’ ‘XY’ < largefile.txt > tr2uoutp
+
+This returned 1000024 system calls because unbuffered requires
+more calls to read and write.
+
+To copy it onto the terminal:
+
+strace -c ./tr2b ‘AB’ ‘XY’ < largefile.txt
+
+Which returned 20516 system calls, and:
+
+strace -c ./tr2u ‘AB’ ‘XY’ < largefile.txt
+
+Which returned system 10000024 calls. Again, tr2u requires more system
+calls.
+
+
+4. To test the speed of each program I used:
+
+time ./tr2b 'AB' 'XY' < largefile.txt > tr2bout2
+
+output:
+
+real    0m0.311s
+user    0m0.235s
+sys     0m0.005s
+
+time ./tr2u 'AB' 'XY' < largefile.txt > tr2uout2
+
+output:
+
+real    0m10.699s
+user    0m1.291s
+sys     0m9.333s
+
+tr2b is much faster.
+
+To test it when copying into the terminal:
+
+time ./tr2b 'AB' 'XY' < largefile.txt > tr2bo
+
+output:
+
+real   0m6.346s
+user   0m0.315s
+sys    0m0.069s
+
+
+time ./tr2u 'AB' 'XY' < largefile.txt
+
+output:
+
+real   0m10.706s
+user   0m1.394s
+sys    0m8.385s
+
+tr2b is faster again - read and write calls are much
+more frequent when using unbuffered I/O.
+
+
+-------------------------HW REPORT----------------------
+
+
+I wrote a short c program to create files of desired line #:
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
+int main(int argc, char* argv[]){
+  int n;
+  scanf("%d", &n);
+  int i;
+  for(i=0; i < n; i++){
+    char lineMsg[] = "~BO {_CIA FKPS NEM\n";
+    write(1, lineMsg, strlen(lineMsg));
+  }
+}
+
+***Command line then input then time outputs below***
+Time compare test between sfrob, sfrobu, sfrobs,
+sfrobu -f, and sfrobs -f
+
+File with zero lines:
+
+time ./createfile | ./sfrob
+0
+
+real    0m0.002s
+user    0m0.000s
+sys     0m0.001s
+
+time ./createfile | ./sfrobu
+0
+
+real    0m0.002s
+user    0m0.000s
+sys     0m0.001s
+
+time ./createfile | ./sfrobs
+0
+
+real    0m0.009s
+user    0m0.001s
+sys     0m0.007s
+
+time ./createfile | ./sfrobu -f
+0
+
+real    0m0.002s
+user    0m0.001s
+sys     0m0.000s
+
+time ./createfile | ./sfrobs -f
+0
+
+real    0m0.016s
+user    0m0.003s
+sys     0m0.006s
+
+
+File with one hundred lines:
+
+time ./createfile | ./sfrob
+100
+
+real    0m2.273s
+user    0m0.003s
+sys     0m0.000s
+
+time ./createfile | ./sfrobu
+100
+
+real    0m0.943s
+user    0m0.002s
+sys     0m0.002s
+
+time ./createfile | ./sfrobs
+100
+
+real    0m0.887s
+user    0m0.004s
+sys     0m0.006s
+
+time ./createfile | ./sfrobu -f
+100
+
+real    0m1.275s
+user    0m0.003s
+sys     0m0.002s
+
+time ./createfile | ./sfrobs -f
+100
+
+real    0m0.006s
+user    0m0.001s
+sys     0m0.007s
+
+
+File with ten thousand lines:
+
+time ./createfile | ./sfrob
+10000
+
+real    0m3.495s
+user    0m0.041s
+sys     0m0.019s
+
+time ./createfile | ./sfrobu
+10000
+
+real    0m2.913s
+user    0m0.069s
+sys     0m0.137s
+
+time ./createfile | ./sfrobs
+10000
+
+real    0m1.969s
+user    0m0.013s
+sys     0m0.036s
+
+time ./createfile | ./sfrobu -f
+10000
+
+real    0m3.168s
+user    0m0.074s
+sys     0m0.133s
+
+time ./createfile | ./sfrobs -f
+10000
+
+real    0m2.445s
+user    0m0.015s
+sys     0m0.039s
+
+
+File with one million lines:
+
+time ./createfile | ./sfrob
+1000000
+
+real    1m22.704s
+user    0m4.355s
+sys     0m2.304s
+
+time ./createfile | ./sfrobu
+1000000
+
+real    1m59.162s
+user    0m7.166s
+sys     0m13.814s
+
+time ./createfile | ./sfrobs
+1000000
+
+real    2m2.656s
+user    0m1.360s
+sys     0m2.847s
+
+time ./createfile | ./sfrobu -f
+1000000
+
+real    2m52.400s
+user    0m9.486s
+sys     0m13.164s
+
+time ./createfile | ./sfrobs -f
+1000000
+
+real    2m29.377s
+user    0m1.935s
+sys     0m3.007s
+
+
+To estime a function that compares input lines to
+comparisons for sfrob and sfrobu, I created a global variable
+that incremented each time the compare function was called.
+These were the results:
+
+sfrobu:
+0 lines: 0
+100 lines: 1913
+10000 lines: 356707
+1000000 lines: 52428309
+
+sfrob:
+0 lines: 0
+100 lines: 1913
+10000 lines: 356707
+1000000 lines: 52428309
+
+Resulting estimated time complexity:
+
+Nlog(N), or more precisely 10*Nlog(N)
+where N is the number of input lines

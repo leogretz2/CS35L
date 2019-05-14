@@ -1,0 +1,147 @@
+Leo Gretzinger
+
+Homework Answers:
+
+Exercise 1.1:
+1.  e m a c s SPC e x e r 1 . h t m l RET
+2.  C-s H T M L
+3.  C-s s c a v e n g e r 
+    M-b
+4.  C-s s e l f -
+    M-b
+5.  C-s arrow
+    M-b
+6.  C-e
+7.  C-a
+8.  I used the Emacs commands to complete these tasks already and they are my answers to questions 1-7.
+9.  No
+10. C-x C-s RET y
+
+Exercise 1.2:
+1.  e m a c s SPC e x e r 2 . h t m l RET
+2.  C-u 1 7 C-n
+    C-k C-k
+3.  C-s D E
+    C-a
+    C-k C-k
+4.  M-<
+    C-s # C C-s
+    C-p
+    C-a
+    C-k C-k C-k C-k C-k
+5.  C-s < !
+    C-a C-k C-k
+
+    C-SPC C-u 4 C-n DEL
+
+    C-s < !
+    C-a 
+    C-k C-k
+C-x C-c y
+    
+Exercise 1.3:
+1.  e m a c s SPC e x e r 3 . h t m l RET
+2.  C-s A M-f C-f
+    C-d 4 2 
+
+    C-s A M-f C-f
+    C-d 4 2
+3.  M-<
+    C-s U T
+    C-b C-SPC C-u 4 C-f DEL
+    S - A S C I I
+4.  M-<
+    C-M-s [^[:ascii:]]
+    C-a C-k
+5.  M-<
+    C-s / o l
+    C-e RET
+6.  C-x C-c y
+    ENT y e s
+
+Exercise 1.4:
+1.  c a t SPC e x e r 2 . h t m l SPC e x e r 2 . d i f f SPC > e x e r 4 . h t m l
+2.  e m a c s SPC e x e r 4 . h t m l
+3.  M-> 
+    C-r < ! C-SPC C-s - > RET C-w
+    M-g M-g 4 0 6 RET C-p C-y
+4.  M-> 
+    C-r < p C-r C-SPC C-s - - > C-s RET C-w
+    C-r < ! C-SPC C-s - > RET C-w
+    C-r < ! C-SPC C-e C-w
+    C-r < ! C-SPC C-e C-w
+    M-g M-g 3 9 3 RET RET C-p C-p C-y C-u 3 M-y
+    C-a C-d C-p C-d C-p C-d C-p C-d
+    M-g M-g 3 4 9 RET C-y C-u 4 M-y
+    C-a C-d C-p C-d
+    M-g M-g 1 2 5 RET C-y C-u 4 M-y
+    M-g M-g 1 7 RET C-y C-u 4 M-y
+5.  M-> C-r - - - RET C-SPC
+    M-> DEL
+6. C-/
+7. DEL - >
+   C-r - - - RET < ! - -
+8. M-< M-% < o l > RET < o L > RET y y y y y y y (seven occurences).
+9. d i f f SPC - u SPC e x e r 1 . h t m l SPC e x e r 4 . h t m l SPC > e x e r 4 . d i f f
+   e m a c s SPC e x e r 4 . d i f f
+   It works, the only changes are the seven <oL>'s and the large comment on the end
+
+Exercise 1.5
+1. e m a c s RET
+   M-x m k d i r RET
+   j u n k RET
+2. M-x c d RET
+   M-x j u n k RET
+   C-x C-f h e l l o . c RET
+   Copy the file (Ctrl C in Google Chrome and Right Click in Emacs)
+   C-x C-s
+3. M-x c o m p i l e RET
+   DEL DEL DEL DEL DEL DEL DEL DEL // to delete make -k
+   g c c SPC - o SPC h e l l o SPC h e l l o . c RET
+4. M-! SPC . / h e l l o
+   C-x 0 RET
+   C-x C-w h e l l o - o u t RET
+5. C-x C-w ~ / c s 3 5 l / k e y 1 . t x t RET
+   y RET
+
+   EOF on input
+
+   -*- mode: compilation; default-directory: "~/junk/" -*-
+   Compilation started at Sun Apr  7 22:15:15
+
+   ./hello
+   #include <stdio.h>
+   int
+   main (void)
+   {
+     int c = getchar ();
+     if (c < 0)
+       {
+         if (ferror (stdin))
+           perror ("stdin");
+         else
+           fprintf (stderr, "EOF on input\n");
+         return 1;
+       }
+     if (putchar (c) < 0 || fclose (stdout) != 0)
+       {
+         perror ("stdout");
+         return 1;
+       }
+     return 0;
+   }
+
+   Compilation ended at Sun Apr  7 22:15:15
+
+Exercise 1.6
+1. e m a c s C-x b *scratch*
+2. ( r a n d o m SPC " 9 0 5 - 1 3 7 - 8 7 1 ) RET
+   C-j // returns -318396948897790845
+3. ( s e t q SPC x SPC ( r a n d o m ) ) C-j // outputted -787829512172716916
+   ( s e t q SPC y SPC ( r a n d o m ) ) C-j // outputted 1813857567919302672
+4. ( * SPC x SPC y ) C-j // outputted 1609668343192004800 - incorrect product
+5. M-: ( * SPC x SPC y ) RET // outputted 1609668343192004800 - same incorrect product
+6. These are not real random numbers, just pseudo random. They create the same result every time, meaning that there is an algorithm to create them. By the 
+   mathematical definition, therefore, these numbers are not truly random. 
+7. The most positive fix 2305843009213693951. Therefore, it is highly likely that the numbers will overflow and create an incorrect product. Taking the square
+   root of this there is only a around a 15% chance that the number does not overflow and create an incorrect product. 

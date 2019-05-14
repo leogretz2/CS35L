@@ -1,0 +1,100 @@
+#!/bin/bash
+
+checkanddup()
+{
+
+fullname=$1
+
+filename1=`echo ${fullname##*/}`
+filename=`echo $filename1 | tr [:upper:] [:lower:]`
+
+str1=`echo $fullname | tr [:upper:] [:lower:]`
+
+# if line is not empty
+nextfullname=$2
+if [ "$?" -eq 0 ]
+then
+    # check if current and next line are duplicates
+    str2=`echo $nextfullname | tr [:upper:] [:lower:]`
+    if [ "$str1" == "$str2" ]
+    then
+        echo $filename
+        return
+    fi
+fi
+
+# checks for leading dash
+echo $filename | grep -q '^[-]'
+if [ "$?" -eq 0 ]
+then
+    echo $filename
+fi
+
+# checks for leading period
+echo $filename | grep -q '^[.]'
+if [[ "$?" -eq 0 ]]
+then
+    #checks if entire is either . or ..
+    echo $filename | grep -E -q -v '^..$|^.$'
+    if [ "$?" -eq 0 ]
+    then
+        echo $filename
+        return
+    fi
+fi
+
+# checks if any character besides ASCII letters, ., -, or _
+stripped=`echo $filename | sed 's/[A-Za-z._]//g' | sed 's/[-]//g'`
+if [ ${#stripped} -gt 0 ]
+then
+    echo $filename
+    return
+fi
+
+# checks if filename is longer than 14 characters
+if [ ${#filename} -gt 14 ]
+then
+    echo $filename
+    return
+fi
+
+}
+
+
+dir=$1 # taking a directory in as an argument
+
+# Status error if wrong number of arguments
+if [ "$#" -gt 1 ]
+then
+    >&2 echo "Error in argument number"
+fi
+
+# Status error if operand starts with -
+if [[ $dir == \-* ]]
+then
+    >&2 echo "Operand cannot start with -"
+fi
+
+
+# create file with all files and directory from
+# the operand, put upper to lower case and sort 
+allfiles2=`find $dir | tr [:upper:] [:lower:]`
+allfiles2=`echo $allfiles2 | tr " " "\n" | sort`
+
+# declare array with all pathnames
+declare -a array
+n=0
+for k in $allfiles2
+do
+    array[$n]=$k
+    n=$((n+1))
+done
+
+# loop through all pathnames and use error 
+# checker
+let m=1
+for i in $allfiles2
+do
+    checkanddup $i ${array[$m]}
+    m=$((m+1))
+done

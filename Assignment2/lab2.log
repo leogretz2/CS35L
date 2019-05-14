@@ -1,0 +1,111 @@
+- To create the sorted text file called words I used the command: 
+sort /usr/share/dict/words > words
+
+- Converted the assignment page to an html text file by entering:
+wget http://web.cs.ucla.edu/classes/spring19/cs35L/assign/assign2.html
+
+- the tr -c 'A-Za-z' '[\n*]' command outputs only the letters in the file and 
+puts each word on a new line. The -c list the complements, the 'A-Za-z'
+and '[\n*]' say that letters and newline characters are the only permissible 
+characters
+
+- the tr -cs 'A-Za-z' '[\n*]' command does the same as the previous command rem
+oves all empty lines by adding the s to -cs
+
+- the tr -cs 'A-Za-z' '[\n*]' | sort command takes all the words in the 
+previous two commands and sorts them in alphabetical order, because the output
+is piped to sort
+
+- the tr -cs 'A-Za-z' '[\n*]' | sort -u command removes repeated words, because
+ the -u is added (stands for unique)
+
+- the tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - words command produces three 
+columns: the first displays the words that are only in assign2.html,
+the second displays the words that are only in words (the dictionary) and the 
+third displays the words that are in both files, because the output
+of the previous command is piped as input into comm - words 
+(which compares -, or assign2.html, to words)
+
+- the tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words # ENGLISHCHECKER com
+mand just suppresses the second and third columns from the command above,
+effectively displaying the words in assign2.html that are not in the 
+dictionary, because the -23 is added as an option to the comm command.
+
+
+buildwords:
+
+#!/bin/bash
+
+sed -n '/<td>/p' |
+sed 'n; d' |
+sed 's/<[^>]*>//g' |
+sed "s/\`/\'/g" |
+tr [:upper:] [:lower:] |
+sed '/^$/d' |
+tr -d [:blank:] |
+sed "/[^pk\'mnwlhaeiou]/d" |
+sort -u
+
+
+cat hwnwdshw.htm | ./buildwords > hwords # creates the file hwords with the 
+Hawaiian Dictionary
+
+cat FILE_NAME | tr [:upper:] [:lower:] | tr -cs "A-Z\'a-z" '[\n*]' | 
+sort -u | comm -23 - hwords # HAWAIIANCHECKER
+
+- This command is a generic Hawaiian words checker that, pipe by pipe, converts
+ every upper case letter to a lower case letter, then converts the
+complements of ASCII letters and replaces them with returns, then sorts the 
+words and removes non-unique words and then compares the input file
+to a file containing all the words in the basic Hawaiian Dictionary and 
+displays only the words in the file that are not in the Hawaiian Dictionary.
+
+
+cat assign2.html | tr [:upper:] [:lower:] | tr -cs "A-Z\'a-z" '[\n*]' | 
+sort -u | comm -23 - hwords > resulthwn # HAWAIIANCHECKER
+
+
+- This command uses the assignment 2 webpage as the input to the generic 
+Hawaiian Spell-checker command and pipes the results into a file named
+resulthwn. Then I ran the command wc resulthwn and I got 500 misspelled 
+Hawaiian words on the webpage.
+
+
+cat hwords | tr [:upper:] [:lower:] | tr -cs "A-Z\'a-z" '[\n*]' | 
+sort -u | comm -23 - hwords > resulthwords # HAWAIIANCHECKER
+
+- This was just a checking command to see if hwords matched up with the
+itself after the Hawaiian checker
+
+
+Now, the number of words found by the ENGLISHCHECKER to be misspelled in the 
+webpage was 41, a number which was found using the first two command lines
+below. The number of words found by the HAWAIIANCHECKER to be misspelled in the
+webpage was 500, as found above (and also the third and fourth lines
+below):
+
+cat assign2.html | tr [:upper:] [:lower:] | tr -cs 'A-Za-z' '[\n*]' | 
+sort -u | comm -23 - words > resulteng # ENGLISHCHECKER
+
+wc resulteng # outputs 41
+
+
+cat assign2.html | tr [:upper:] [:lower:] | tr -cs "A-Z\'a-z" '[\n*]' | 
+sort -u | comm -23 - hwords > resulthwords # HAWAIIANCHECKER
+
+wc resulthwords # outputs 500
+
+
+Lastly, these two lists can be compared to the opposite dictionaries using the 
+comm command as seen below:
+
+cat resulteng | comm -12 - hwords  # outputs only the words misspelled in 
+#English but correctly spelled in Hawaiian - 3 words
+ - Examples: wiki and lau
+
+(cat assign2.html | tr [:upper:] [:lower:] | tr -cs 'A-Za-z' '[\n*]' | 
+sort -u | comm -23 - hwords > resulthwords)
+cat resulthwords | comm -12 - words  # outputs only the words misspelled in
+# Hawaiian but correctly spelled in English- 445
+ - Examples: able, about
+

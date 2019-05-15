@@ -1,0 +1,48 @@
+--------------------- LAB ---------------------
+First I started by checking the version of sort:
+
+sort --version      (This outputted version 8.31)
+
+To create a file with 2^24 lines of floating point numbers
+I piped the random number generator with a 2^26 bytes max
+(2^24 * 4 bytes per floating point number) and removed all
+white space with tr and sed:
+
+od -A n -f -N $((2<<25)) < /dev/urandom | tr -s [:blank:] '\n' | sed '/^$/d' > thefile
+
+To time the sorting algorithm and output it to /dev/null:
+
+time -p sort -g thefile > /dev/null
+real 37.03
+user 199.18
+sys 0.77
+
+Incorporating the thread aspect the commands and times were:
+
+time -p sort -g --parallel=1 thefile > /dev/null
+real 200.73
+user 200.39
+sys 0.32
+
+time -p sort -g --parallel=2 thefile > /dev/null
+real 109.97
+user 209.46
+sys 0.47
+
+time -p sort -g --parallel=4 thefile > /dev/null
+real 64.16
+user 218.24
+sys 0.73
+
+time -p sort -g --parallel=8 thefile > /dev/null
+real 45.14
+user 247.18
+sys 0.84
+
+The more threads used, the quicker the program ran. This
+is likely because with more threads, the memory address
+that needed to be sorted from are already being sorted by
+the other threads, speeding the process. With 8 threads, its
+close to the sort option without threads, so that means in the
+new version 8.31, the sort command uses an optimized amount of
+threads relatively close to 8.

@@ -1,0 +1,73 @@
+------------------Lab 8----------------------
+First, I followed the Piazza post to I set up my Beagle Bone and connected it to wifi:
+
+open PuTTY
+root
+connmanctl
+connmanctl > enable wifi
+connmanctl > scan wifi
+connmanctl > services
+connmanctl > agent on
+connmanctl > connect wifi_506583d4fc5e_544e434150413937414239_managed_psk
+connmanctl > quit
+
+This connected me to the Room wifi. Then I updated the necessary packages
+sudo apt-get update
+sudo apt-get install xauth
+sudo apt-get install xvfb
+sudo apt-get install firefox-esr-l10n-en-gb
+
+I then enabled XForwarding in the specific files with
+sudo vim /etc/ssh/ssh_config
+sudo vim /etc/ssh/sshd_config
+
+I then installed the OpenSSH files:
+
+sudo apt-get install openssh-server
+sudo apt-get install openssh-client
+
+Lastly, I installed XMing, restarted PuTTY and enabled X11 Forwarding.
+With the Beagle Bone ready, I worked with Evan Wang
+
+I made the password for my public/private RSA key pairs with:
+
+ssh-keygen
+
+I saved it in the default file: ~/.ssh/id_rsa my pressing enter and entered the
+password 'piece' twice to confirm it. 
+
+I acted as the client first and added my public key to Evan's server which was at IP address 10.97.85.178:
+
+ssh-copy-id -i other@10.97.85.178
+
+At this point, I typed it Evan's public password. Then I ssh'd in with the X option onto his host that allows port forwarding:
+
+ssh -X other@10.97.85.178
+
+Once I was in his Beagle Bone, I ran the firefox command and a firefox window popped up, showing success. I used the exit command to exit.
+
+Then, I was server, where I added Evan's profile on my server and set the password:
+
+sudo useradd -d /home/leo -m leo
+sudo passwd leo
+
+Then I changed into that directory and created an .ssh.
+
+cd /home/leo/
+sudo mkdir .ssh
+
+Lastly, I changed the ownership settings with chown and chmod:
+
+sudo chown -R leo .ssh
+sudo chmod 700 .ssh
+
+I found my IP address with the 'ifconfig' command, which allowed Evan to ssh into my Beagle Bone as the client.
+
+
+
+and started by using the following commands and also set the password:
+
+sudo useradd -d /home/leo -m leo
+sudo passwd leo
+
+

@@ -1,0 +1,25 @@
+-----------------------------------HW 8----------------------------------------
+
+1. a. The network is still secure because when the bytes are going across the
+network they have already been encryted on your computer. They are encrypted
+with public keys and can only be decrypted with private keys that no random
+observer would access to without computing power that has not been invented
+yet.
+
+b. With access to keystrokes, the data could be corrupted and the network
+would be insecure, because they would have access to the unencrypted message
+that you originally typed out. They would also be able to determine the
+passcode for the private key. If they had access to the computer then they
+could enter the passcode and access files.
+
+c. If the team had physical control of the USB at any time, no matter how long
+they had it, they could access the .ssh folder and private key and decrypt all
+information and/or bytes going across the network.
+
+2. The gpg2 --verify command does not actually verify if the network is secure
+because all it does is check if the target file and detached signatures match.
+A third party attacker could intercept a message, and change both the message
+signature file, which would confuse the gpg2 --verify command. This could be
+fixed by posting your public key on a trusted online source that tracks
+anyone who asks to use your public key and you could monitor and deny access
+to any strangers. 

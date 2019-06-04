@@ -1,0 +1,89 @@
+-----------------------HW 9------------------------
+1. I made another clone of the diffutils repository
+
+git clone https://git.savannah.gnu.org/git/diffutils.git
+
+2. Check out and create branch called quote based off of
+diffutils version 3.0:
+
+cd diffutils
+git checkout v3.0 -b quote
+
+3. Patch the patch file into new branch
+
+patch -p1 < ../quote-3.0-patch.txt
+
+4. I learned the C-x 4 a command to write a log entry
+
+5. I entered emacs and made a changelog entry based on
+the original log:
+
+emacs
+C-x 4 a
+
+entered:
+
+ * maint: quote 'like this' or "like this", not `like this' in diffutils 3.0
+
+    This is in response to a recent change in the GNU coding standards,
+    which now suggest quoting 'like this' or "like this", instead of
+    `like this' or ``like this''.
+        * src/cmp.c (try_help, specify_ignore_initial, usage, main):
+        * src/diff.c (main, try_help, option_help_msgid, specify_value)
+        (compare_files):
+        * src/diff3.c (main, try_help, option_help_msgid, usage)
+        (read_diff):
+        * src/dir.c (compare_names):
+        * src/sdiff.c (try_help, usage, check_child_status, main):
+        * src/util.c (finish_output):
+    Quote 'like this' or "like this" in commentary.
+
+C-x C-s
+C-x C-c
+
+6. Commit files with changelog as the commit message:
+
+git add .
+git commit -F ChangeLog
+
+7. Format the patch to be emailed out:
+
+git format-patch -1 --stdout > formatted-patch.txt
+
+8. Make a new branch for my partner (Nishanth Yeddula), get his formatted patch and
+test if his works:
+
+git checkout -b partner v3.0
+
+git am < ../partner-patch.txt
+
+./bootstrap
+./configure
+make
+make check
+
+9. To check if miy own patch works, make the whole thing, then cd into the
+directory made and check the changelog:
+
+make distdir
+cd diffutils-3.0.2-be79-dirty
+emacs ChangeLog
+
+This displays the entire ChangeLog including my most recent addition at the top
+
+10. I used these commands to enter eggert's emacs folder to open the merge window:
+
+export PATH=/usr/local/cs/bin:$PATH
+cd ~eggert/src/gnu/emacs
+gitk
+
+This opened the merge window in xming, where I scrolled through the commit's and 
+found the last merge on 2015-01-25:
+
+Merge branch 'master' into xwidget
+Author and Committer: Joakim Verona <joakim@verona.se>
+2015-01-25 12:19:27
+
+The window that opens displays all of the commits in the top bar, and then in the
+bottom left, there is a display of the selected commit and in the right bottom
+section, there is a list of comments for each commit/merge.
